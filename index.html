@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N3 Japanese Lessons</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        const { useState, useEffect } = React;
+        
+        const DailyJapaneseN3 = () => {
+          const lessons = [
+            {
+              day: 1,
+              title: "使役受身形 (Causative Passive)",
+              content: "彼は上司に報告させられた。\n(Kare wa joushi ni houkoku saserarета.)",
+              pronunciation: "ka-re wa jo-u-shi ni ho-u-ko-ku sa-se-ra-re-ta",
+              english: "He was made to report by his boss.",
+              grammar: "V-causative + passive = 'be made to do/be forced to do'",
+              example: "子どもは宿題をさせられる。(Children are made to do homework.)"
+            },
+            {
+              day: 2,
+              title: "～ばかりか (not only...but also)",
+              content: "彼はお金ばかりか、時間も浪費している。\n(Kare wa okane bakarika, jikan mo rouhi shite iru.)",
+              pronunciation: "ka-re wa o-ka-ne ba-ka-ri-ka, ji-kan mo ro-u-hi shi-te i-ru",
+              english: "He is not only wasting money, but also time.",
+              grammar: "Noun/Verb + ばかりか = emphasizes 'not just X, but also Y'",
+              example: "この本は日本ばかりか、海外でも人気だ。(This book is popular not just in Japan, but overseas too.)"
+            },
+            {
+              day: 3,
+              title: "～ものなら (if one dares to)",
+              content: "もし反抗するものなら、後悔することになる。\n(Moshi hankō suru monaranara, koukai suru koto ni naru.)",
+              pronunciation: "mo-shi han-ko-u su-ru mo-na-ra-na-ra, ko-u-kai su-ru ko-to ni na-ru",
+              english: "If you dare to rebel, you will regret it.",
+              grammar: "Verb conditional + ものなら = 'if (one dares to); if you so much as'",
+              example: "彼に失礼なことを言うものなら、怒られる。(If you dare to be rude to him, you'll be scolded.)"
+            },
+            {
+              day: 4,
+              title: "～かといって (and yet; but)",
+              content: "学生だからといって、勉強しないわけではない。\n(Gakusei dakara to itte, benkyō shinai wake de wa nai.)",
+              pronunciation: "ga-ku-sei da-ka-ra to i-tte, ben-kyo-u shi-na-i wa-ke de wa na-i",
+              english: "Just because someone is a student doesn't mean they don't study.",
+              grammar: "Clause + かといって = 'and yet; but; just because...doesn't mean'",
+              example: "彼が成功したかといって、努力しなかったわけではない。(Just because he succeeded doesn't mean he didn't work hard.)"
+            },
+            {
+              day: 5,
+              title: "～に比べて (compared to; in contrast to)",
+              content: "去年に比べて、今年の売上が急増した。\n(Kyonen ni kurabete, kotoshi no uriage ga kyūzōu shita.)",
+              pronunciation: "kyo-ne-n ni ku-ra-be-te, ko-to-shi no u-ri-a-ge ga kyu-u-zo-u shi-ta",
+              english: "In comparison to last year, this year's sales increased rapidly.",
+              grammar: "Noun + に比べて = 'compared to; in contrast with'",
+              example: "兄に比べて、弟は静かだ。(Compared to the older brother, the younger brother is quiet.)"
+            },
+            {
+              day: 6,
+              title: "～ままで (leaving as is; without changing)",
+              content: "彼は実家で親と一緒のままで暮らしている。\n(Kare wa jikka de oya to isshо no mama de kurashite iru.)",
+              pronunciation: "ka-re wa ji-kka de o-ya to i-sho no ma-ma de ku-ra-shi-te i-ru",
+              english: "He continues to live with his parents in his hometown as things are.",
+              grammar: "N/V stem + ままで/ままに = 'leave in the current state; without change'",
+              example: "ドアを開けたままで走った。(He ran with the door left open.)"
+            },
+            {
+              day: 7,
+              title: "～にしては (for; considering; given that)",
+              content: "彼は高校生にしては成熟している。\n(Kare wa kōkōusei ni shite wa seijuku shite iru.)",
+              pronunciation: "ka-re wa ko-u-ko-u-sei ni shi-te wa sei-ju-ku shi-te i-ru",
+              english: "Considering he is a high school student, he is quite mature.",
+              grammar: "N + にしては = 'considering X; for/given that X; despite being X'",
+              example: "値段にしては、品質がいい。(For the price, the quality is good.)"
+            },
+            {
+              day: 8,
+              title: "～かわりに (in exchange for; in place of)",
+              content: "私は仕事が忙しいかわりに、給料が高い。\n(Watashi wa shigoto ga isogashii kawari ni, kyūryō ga takai.)",
+              pronunciation: "wa-ta-shi wa shi-go-to ga i-so-ga-shii ka-wa-ri ni, kyu-u-ryo-u ga ta-ka-i",
+              english: "In exchange for being busy with work, my salary is high.",
+              grammar: "V/Adj + かわりに = 'in exchange for; in compensation for; instead of'",
+              example: "姉が手伝ってくれるかわりに、弟がお菓子を買った。(In exchange for the older sister helping, the younger brother bought snacks.)"
+            }
+          ];
+
+          const [currentDay, setCurrentDay] = useState(1);
+
+          const lesson = lessons[currentDay - 1];
+
+          return (
+            React.createElement('div', { className: "min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black p-6" },
+              React.createElement('div', { className: "max-w-3xl mx-auto" },
+                React.createElement('div', { className: "text-center mb-8" },
+                  React.createElement('div', { className: "flex items-center justify-center gap-2 mb-2" },
+                    React.createElement('h1', { className: "text-4xl font-bold text-white" }, "N3 日本語")
+                  ),
+                  React.createElement('p', { className: "text-purple-200" }, "Advanced Grammar & Expressions")
+                ),
+                React.createElement('div', { className: "bg-gray-900 rounded-2xl shadow-2xl p-8 mb-6 border border-purple-500" },
+                  React.createElement('div', { className: "mb-6" },
+                    React.createElement('div', { className: "flex items-center gap-2 mb-3" },
+                      React.createElement('span', { className: "text-sm font-bold text-purple-300 bg-purple-900 px-4 py-2 rounded-full" },
+                        "Day " + currentDay + " of " + lessons.length
+                      )
+                    ),
+                    React.createElement('h2', { className: "text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-4" },
+                      lesson.title
+                    )
+                  ),
+                  React.createElement('div', { className: "bg-purple-900 bg-opacity-40 rounded-lg p-6 mb-6 border border-purple-600" },
+                    React.createElement('p', { className: "text-sm font-semibold text-purple-300 mb-3" }, "Grammar:"),
+                    React.createElement('p', { className: "text-white text-lg mb-4" }, lesson.grammar)
+                  ),
+                  React.createElement('div', { className: "bg-gray-800 rounded-lg p-6 mb-6 border border-gray-700" },
+                    React.createElement('div', { className: "mb-4" },
+                      React.createElement('p', { className: "text-sm font-semibold text-gray-400 mb-2" }, "Japanese:"),
+                      React.createElement('p', { className: "text-2xl font-bold text-white font-serif mb-3 leading-relaxed whitespace-pre-line" },
+                        lesson.content
+                      ),
+                      React.createElement('p', { className: "text-gray-300 text-sm italic" }, lesson.pronunciation)
+                    )
+                  ),
+                  React.createElement('div', { className: "mb-6" },
+                    React.createElement('p', { className: "text-sm font-semibold text-gray-400 mb-2" }, "English:"),
+                    React.createElement('p', { className: "text-white text-lg bg-gray-800 p-4 rounded-lg border border-gray-700" },
+                      lesson.english
+                    )
+                  ),
+                  React.createElement('div', { className: "bg-gray-800 rounded-lg p-6 border border-gray-700" },
+                    React.createElement('p', { className: "text-sm font-semibold text-gray-400 mb-3" }, "Another Example:"),
+                    React.createElement('p', { className: "text-purple-200 mb-2" }, lesson.example)
+                  )
+                ),
+                React.createElement('div', { className: "text-center" },
+                  React.createElement('p', { className: "text-gray-400 mb-4 text-sm" }, "Jump to day:"),
+                  React.createElement('div', { className: "flex flex-wrap gap-2 justify-center" },
+                    lessons.map(l =>
+                      React.createElement('button', {
+                        key: l.day,
+                        onClick: () => setCurrentDay(l.day),
+                        className: "w-10 h-10 rounded-lg font-semibold transition " + (currentDay === l.day ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')
+                      }, l.day)
+                    )
+                  )
+                )
+              )
+            )
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(DailyJapaneseN3));
+    </script>
+</body>
+</html>
+Click "Commit new file"
+3. Deploy to Vercel
+Go to https://vercel.com
+Click "Sign Up" → Sign up with GitHub
+Click "New Project" → Select your japanese-n3-lessons repository
+Click "Deploy" (takes ~1 minute)
+You'll get a live URL like japanese-n3-lessons.vercel.app
+4. Access on Your Phone
+Copy that URL and share it with yourself or bookmark it
+Open it on your phone anytime—it works offline too once loaded!
+Done! Your app is now live and accessible from any device. 🎉
